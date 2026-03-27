@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/* Estilos personalizados adicionales */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply text-gray-800;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-8 rounded-full transition duration-300;
+  }
+  
+  .section-title {
+    @apply text-4xl font-bold text-center mb-12;
+  }
+}
+
+/* Animaciones para el formulario */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
+/* Estilo para inputs con floating label effect */
+input:focus + .floating-label,
+textarea:focus + .floating-label,
+input:not(:placeholder-shown) + .floating-label,
+textarea:not(:placeholder-shown) + .floating-label {
+  transform: translateY(-2.5rem) scale(0.9);
+  color: #15803d;
+}
+
+/* Compensar el navbar fijo en todas las secciones */
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* Para dispositivos móviles */
+@media (max-width: 768px) {
+  section[id] {
+    scroll-margin-top: 64px;
+  }
+}
+
+/* Asegurar que el contenido no quede debajo del navbar fijo */
+body {
+  padding-top: 0;
+  margin: 0;
+}
+
+/* Para la página de contacto, asegurar espacio para el navbar */
+.contact-page {
+  padding-top: 0;
+}
+
+/* Scroll suave y padding para anchors */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Compensar navbar en secciones con id */
+section[id] {
+  scroll-margin-top: 80px;
+}
+
+/* Para dispositivos móviles */
+@media (max-width: 768px) {
+  html {
+    scroll-padding-top: 64px;
+  }
+  
+  section[id] {
+    scroll-margin-top: 64px;
+  }
+}

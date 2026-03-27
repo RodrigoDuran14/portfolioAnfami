@@ -51,12 +51,6 @@ section[id] {
   scroll-margin-top: 80px;
 }
 
-/* Para dispositivos móviles */
-@media (max-width: 768px) {
-  section[id] {
-    scroll-margin-top: 64px;
-  }
-}
 
 /* Asegurar que el contenido no quede debajo del navbar fijo */
 body {
@@ -88,5 +82,78 @@ section[id] {
   
   section[id] {
     scroll-margin-top: 64px;
+  }
+}
+
+/* Mejoras responsive para el admin */
+@media (max-width: 640px) {
+  /* Ajustar tarjetas de estadísticas */
+  .stats-card {
+    @apply p-3;
+  }
+  
+  .stats-card .stats-icon {
+    @apply p-2;
+  }
+  
+  .stats-card .stats-icon svg {
+    @apply h-5 w-5;
+  }
+  
+  .stats-card .stats-value {
+    @apply text-xl;
+  }
+}
+
+/* Mejorar scroll en tablas en móvil */
+@media (max-width: 768px) {
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Ajustar tabs en móvil */
+@media (max-width: 640px) {
+  .tabs-container {
+    @apply overflow-x-auto;
+  }
+  
+  .tabs-container nav {
+    @apply min-w-max;
+  }
+}
+
+/* ============================================
+   SCROLLBAR HIDE - Ocultar scrollbar pero mantener funcionalidad
+   ============================================ */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* ============================================
+   BREAKPOINT EXTRA SMALL (xs) - Para pantallas muy pequeñas
+   ============================================ */
+@layer utilities {
+  @media (min-width: 480px) {
+    .xs\:inline-block {
+      display: inline-block;
+    }
+    .xs\:hidden {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 479px) {
+    .xs\:inline-block {
+      display: none;
+    }
+    .xs\:hidden {
+      display: inline-block;
+    }
   }
 }

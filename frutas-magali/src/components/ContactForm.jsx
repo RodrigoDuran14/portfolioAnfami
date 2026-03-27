@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import emailjs from '@emailjs/browser';
+import toast from 'react-hot-toast';
 import { addContact } from '../services/ContentService';
 import { 
   Send, 
-  CheckCircle, 
-  AlertCircle, 
   Loader2,
   User,
   Mail,
   Phone,
   MessageSquare,
-  Sparkles
+  Sparkles,
+  CheckCircle
 } from 'lucide-react';
 
 export default function ContactForm() {
@@ -22,7 +22,6 @@ export default function ContactForm() {
   });
   
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState({ type: '', message: '' });
   const [focused, setFocused] = useState({});
 
   const handleChange = (e) => {
@@ -30,10 +29,6 @@ export default function ContactForm() {
       ...formData,
       [e.target.name]: e.target.value
     });
-    // Limpiar error del campo cuando el usuario comienza a escribir
-    if (status.type === 'error' && status.field === e.target.name) {
-      setStatus({ type: '', message: '' });
-    }
   };
 
   const handleFocus = (field) => {
@@ -46,23 +41,23 @@ export default function ContactForm() {
 
   const validateForm = () => {
     if (!formData.nombre.trim()) {
-      setStatus({ type: 'error', message: 'Por favor ingresa tu nombre', field: 'nombre' });
+      toast.error('Por favor ingresa tu nombre');
       return false;
     }
     
     if (!formData.email.trim()) {
-      setStatus({ type: 'error', message: 'Por favor ingresa tu email', field: 'email' });
+      toast.error('Por favor ingresa tu email');
       return false;
     }
     
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      setStatus({ type: 'error', message: 'Por favor ingresa un email válido', field: 'email' });
+      toast.error('Por favor ingresa un email válido');
       return false;
     }
     
     if (!formData.mensaje.trim()) {
-      setStatus({ type: 'error', message: 'Por favor escribe tu mensaje', field: 'mensaje' });
+      toast.error('Por favor escribe tu mensaje');
       return false;
     }
     
@@ -77,7 +72,7 @@ export default function ContactForm() {
     }
     
     setLoading(true);
-    setStatus({ type: '', message: '' });
+    const sendingToast = toast.loading('Enviando mensaje...');
 
     try {
       // 1. Guardar en Firebase
@@ -107,9 +102,10 @@ export default function ContactForm() {
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY
       );
 
-      setStatus({
-        type: 'success',
-        message: '¡Mensaje enviado con éxito! Te contactaremos en las próximas 24 horas.'
+      toast.dismiss(sendingToast);
+      toast.success('¡Mensaje enviado con éxito! Te contactaremos en las próximas 24 horas.', {
+        duration: 5000,
+        icon: '🎉',
       });
       
       // Limpiar formulario
@@ -123,17 +119,11 @@ export default function ContactForm() {
       // Limpiar estados de focus
       setFocused({});
 
-      // Scroll al mensaje de éxito
-      const successElement = document.getElementById('form-success');
-      if (successElement) {
-        successElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-
     } catch (error) {
       console.error('Error al enviar mensaje:', error);
-      setStatus({
-        type: 'error',
-        message: 'Error al enviar el mensaje. Por favor intenta de nuevo o contáctanos por teléfono.'
+      toast.dismiss(sendingToast);
+      toast.error('Error al enviar el mensaje. Por favor intenta de nuevo o contáctanos por teléfono.', {
+        duration: 5000,
       });
     } finally {
       setLoading(false);
@@ -143,9 +133,7 @@ export default function ContactForm() {
   const inputClasses = (fieldName) => {
     const baseClasses = "w-full px-4 py-3 border rounded-lg transition-all duration-200 outline-none";
     const focusClasses = "focus:ring-2 focus:ring-green-500 focus:border-transparent";
-    const errorClasses = status.field === fieldName && status.type === 'error' 
-      ? "border-red-500 bg-red-50" 
-      : "border-gray-300";
+    const errorClasses = "border-gray-300";
     const floatingClasses = focused[fieldName] || formData[fieldName] 
       ? "border-green-500 shadow-sm" 
       : "";
@@ -168,24 +156,6 @@ export default function ContactForm() {
       
       {/* Formulario */}
       <div className="p-6 md:p-8">
-        {status.message && (
-          <div 
-            id="form-success"
-            className={`mb-6 p-4 rounded-lg flex items-start gap-3 animate-slide-down ${
-              status.type === 'success' 
-                ? 'bg-green-50 border border-green-200 text-green-800' 
-                : 'bg-red-50 border border-red-200 text-red-800'
-            }`}
-          >
-            {status.type === 'success' ? (
-              <CheckCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-            ) : (
-              <AlertCircle className="h-5 w-5 flex-shrink-0 mt-0.5" />
-            )}
-            <span className="text-sm md:text-base">{status.message}</span>
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Campo Nombre */}
           <div className="relative">

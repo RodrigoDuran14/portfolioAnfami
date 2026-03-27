@@ -173,3 +173,12 @@ export const markContactAsRead = async (contactId) => {
     throw error;
   }
 };
+
+export const deleteContact = async (contactId) => {
+  try {
+    await deleteDoc(doc(db, COLLECTIONS.CONTACTS, contactId));
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+    throw error;
+  }
+};

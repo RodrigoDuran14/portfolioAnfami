@@ -69,10 +69,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
+          <a href="/#" className="flex items-center space-x-2 group">
             <Leaf className="h-6 w-6 md:h-8 md:w-8 text-green-700 group-hover:scale-110 transition-transform" />
             <span className="font-bold text-lg md:text-xl text-gray-800">Frutas Mágali</span>
-          </Link>
+          </a>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
